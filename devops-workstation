@@ -1,0 +1,42 @@
+FROM centos
+MAINTAINER mahattam
+ENV TERRAFORM_VERSION=0.12.6
+ENV PACKER_VERSION=1.5.1
+
+RUN yum install git -y
+RUN yum install bash -y && \
+    yum --enablerepo=extras install epel-release -y && \
+    yum install nodejs -y && \
+    yum install python3 -y && \
+    pip3 install awscli && \
+    yum groupinstall 'development tools' -y && \
+    yum install wget -y
+
+# Install ansible
+RUN yum install ansible -y
+
+# Install terraform
+RUN wget --quiet https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+  && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+  && mv terraform /usr/bin \
+  && rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+
+# Install kubectl
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
+    chmod +x ./kubectl && \
+    mv ./kubectl /usr/local/bin/kubectl
+RUN curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.12.7/2019-03-27/bin/linux/amd64/aws-iam-authenticator && \
+    chmod +x ./aws-iam-authenticator && \
+    mv ./aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
+
+# Install ChefDK
+RUN wget --quiet https://packages.chef.io/files/current/chefdk/4.7.89/el/6/chefdk-4.7.89-1.el6.x86_64.rpm \
+    && yum localinstall chefdk-4.7.89-1.el6.x86_64.rpm -y \
+    && rm -f chefdk-4.7.89-1.el6.x86_64.rpm
+
+# Install packer
+ADD https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip ./
+RUN unzip packer_${PACKER_VERSION}_linux_amd64.zip -d /bin \
+    && rm -f packer_${PACKER_VERSION}_linux_amd64.zip
+
+WORKDIR /mnt
