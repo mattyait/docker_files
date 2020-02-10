@@ -10,7 +10,8 @@ RUN yum install bash -y && \
     yum install python3 -y && \
     pip3 install awscli && \
     yum groupinstall 'development tools' -y && \
-    yum install wget -y
+    yum install wget -y && \
+    yum install go -y
 
 # Install ansible
 RUN yum install ansible -y
