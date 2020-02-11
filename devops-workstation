@@ -2,6 +2,7 @@ FROM centos
 MAINTAINER mahattam
 ENV TERRAFORM_VERSION=0.12.6
 ENV PACKER_VERSION=1.5.1
+ENV SERVERLESS_VERSION=1.29.2
 
 RUN yum install git -y
 RUN yum install bash -y && \
@@ -11,7 +12,9 @@ RUN yum install bash -y && \
     pip3 install awscli && \
     yum groupinstall 'development tools' -y && \
     yum install wget -y && \
-    yum install go -y
+    yum install go -y && \
+    yum install ruby -y && \
+    yum install vim -y
 
 # Install ansible
 RUN yum install ansible -y
@@ -39,5 +42,10 @@ RUN wget --quiet https://packages.chef.io/files/current/chefdk/4.7.89/el/6/chefd
 ADD https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip ./
 RUN unzip packer_${PACKER_VERSION}_linux_amd64.zip -d /bin \
     && rm -f packer_${PACKER_VERSION}_linux_amd64.zip
+
+# Install Serverless
+RUN npm config set strict-ssl false && \
+    npm install -g serverless@${SERVERLESS_VERSION} && \
+    export PATH=$PATH:/usr/local/bin/serverless
 
 WORKDIR /mnt
