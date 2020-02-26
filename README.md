@@ -7,7 +7,7 @@ docker files for multiple purpose
 
 ## Run the container with mounting the working directory
 
-    docker run -i -d -v $(pwd):/mnt/workspace <imagename>
+    docker run -i -d -v $(pwd):/mnt/workspace --name workstation <imagename>
 
 ## Login into the container to use as working environment
 
