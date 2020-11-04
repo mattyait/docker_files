@@ -39,6 +39,9 @@ RUN wget --quiet https://packages.chef.io/files/current/chefdk/4.7.89/el/6/chefd
     && yum localinstall chefdk-4.7.89-1.el6.x86_64.rpm -y \
     && rm -f chefdk-4.7.89-1.el6.x86_64.rpm
 
+# Install Chefinspec
+RUN curl https://omnitruck.chef.io/install.sh | bash -s -- -P inspec
+
 # Install packer
 ADD https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip ./
 RUN unzip packer_${PACKER_VERSION}_linux_amd64.zip -d /bin \
