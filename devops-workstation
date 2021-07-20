@@ -35,9 +35,9 @@ RUN curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/
     mv ./aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
 
 # Install ChefDK
-RUN wget --quiet https://packages.chef.io/files/current/chefdk/4.7.89/el/6/chefdk-4.7.89-1.el6.x86_64.rpm \
-    && yum localinstall chefdk-4.7.89-1.el6.x86_64.rpm -y \
-    && rm -f chefdk-4.7.89-1.el6.x86_64.rpm
+#RUN wget --quiet https://packages.chef.io/files/current/chefdk/4.7.89/el/6/chefdk-4.7.89-1.el6.x86_64.rpm \
+#    && yum localinstall chefdk-4.7.89-1.el6.x86_64.rpm -y \
+#    && rm -f chefdk-4.7.89-1.el6.x86_64.rpm
 
 # Install Chefinspec
 RUN curl https://omnitruck.chef.io/install.sh | bash -s -- -P inspec
