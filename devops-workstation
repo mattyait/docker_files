@@ -21,7 +21,8 @@ RUN yum install bash -y && \
     yum install jq -y
 
 # Install ansible
-RUN yum install ansible -y
+#RUN pip3 install ansible
+#RUN python3 -m pip install --user ansible
 
 # Install terraform
 RUN wget --quiet https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
@@ -38,9 +39,9 @@ RUN curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/
     mv ./aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
 
 # Install ChefDK
-#RUN wget --quiet https://packages.chef.io/files/current/chefdk/4.7.89/el/6/chefdk-4.7.89-1.el6.x86_64.rpm \
-#    && yum localinstall chefdk-4.7.89-1.el6.x86_64.rpm -y \
-#    && rm -f chefdk-4.7.89-1.el6.x86_64.rpm
+RUN wget https://packages.chef.io/files/stable/chef-workstation/21.10.640/el/8/chef-workstation-21.10.640-1.el8.x86_64.rpm \
+    && yum localinstall chef-workstation-21.10.640-1.el8.x86_64.rpm -y \
+    && rm -f chef-workstation-21.10.640-1.el8.x86_64.rpm
 
 # Install Chefinspec
 RUN curl https://omnitruck.chef.io/install.sh | bash -s -- -P inspec
