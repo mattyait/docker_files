@@ -1,10 +1,21 @@
-FROM alpine:latest
-RUN apk update && apk add bash
-# Install pip
-RUN apk add --no-cache python && \
-    python -m ensurepip && \
-    rm -r /usr/lib/python*/ensurepip && \
-    pip install --upgrade pip setuptools && \
-    rm -r /root/.cache
-# Install aws cli
-RUN pip install awscli
+FROM python:alpine
+
+ENV AWSCLI_VERSION=2.9.22
+
+RUN apk add --no-cache \
+    curl \
+    make \
+    cmake \
+    build-base \
+    gcc \
+    libc-dev \
+    libffi-dev \
+    openssl-dev \
+    && curl https://codeload.github.com/aws/aws-cli/tar.gz/refs/tags/${AWSCLI_VERSION} --output aws-cli-${AWSCLI_VERSION}.tar.gz \
+    && tar -xvf aws-cli-${AWSCLI_VERSION}.tar.gz \
+    && cd aws-cli-${AWSCLI_VERSION} \
+    && pip install --upgrade pip \
+    && python -m pip install -r requirements.txt \
+    && python -m pip install -e .
+
+CMD aws --version
